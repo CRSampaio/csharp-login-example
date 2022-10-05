@@ -28,7 +28,11 @@ dependencies {
 
 application {
     // Define the main class for the application.
-    mainClass = 'poc.becomex.auth.java.App'
+    mainClass = 'br.com.becomex.login.java.App'
+}
+
+run {
+    standardInput = System.in
 }
 
 tasks.named('test') {
