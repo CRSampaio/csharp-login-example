@@ -1,31 +1,31 @@
-# Becomex Login w/ Java Exemple
+# Becomex Login w/ C# /.NET Exemple
 
-This code sample aims to demonstrate how to perform an oAuth2 `client_credentials` flow with `signed_jwt_token` as assertion challenge.
+This code sample aims to demonstrate how to perform an oAuth2 `client_credentials` flow with `signed_jwt_token` or `secret_key` as assertion challenge.
 
 You can simple run this project with following commands. There is a simple console interface to help you to provide the required data.
 
-## Build and Run
+## Requirements
+
+- .NET 6.0.30> SDK
+
+## Run secret key assertion challenge
 
 ```sh
-.\gradlew build
-.\gradlew app:run -q --console=plain 👩‍💻
+dotnet build
+dotnet run --project .\src\Bcx.Login.Cli\ login secret-key [your client id] -sec [your client secret]
 ```
-
-If you are a heavy user 👩‍🎤 and want to challenge yourself, you can try the single command below. Remember to replace that path strings to your actual files. 🙂
-
-## Test App Settings
+## Run private key assertion challenge
 
 ```sh
-.\gradlew app:run -q --console=plain --args='--keystore "C:\...\ks.p12" --keystore-secret "C:\...\ks.secret.txt" --key-secret "C:\...\pem.secret.txt" --client <<bcx-isp-client-id>> --api https://...' 
+dotnet build
+dotnet run --project .\src\Bcx.Login.Cli\ login private-key [your client id] -priv [your private key path] -p [your password file path]
 ```
 
 ## Authorization Flow
 
 OAuth is an open-standard authorization protocol that provides applications the ability for secure designated access. Becomex uses the oAuth's `client_secret` configuration to authenticate daemon services to access any internal or external resources.
 
-The application secrets and passwords interchange can be unsecure because third party providers can sniff network packages and grab sensitive data. To prevent this scenario and keep things a little more secure, Becomex has chosen to only accept `client_secret` requests with `signed_jwt_token`s assertions. Which means the client application must generate an assertion token w/ their identity and sign it w/ their secure RSA Private Key.
-
-(1) Once the assertion challenge was generated an `access token request` should be performed to [Becomex ISP](https://login.becomex.com.br/auth/realms/becomex/.well-known/openid-configuration).
+(1) Once the assertion challenge was generated, an `access token request` should be performed to [Becomex ISP](https://login.becomex.com.br/auth/realms/becomex/.well-known/openid-configuration).
 
 (2) The ISP will verify the token signature w/ the Client's RSA Public Key, and if the identity was valid then an `access_token` will be generated and returned.
 
@@ -66,8 +66,9 @@ The http call is a standard `x-www-form-encoded` request including the follow fi
 
 * `client_id`: REQUIRED. The Client Id provided by Becomex.
 * `grant_type`: REQUIRED. The oAuth grant type, `client_credentials`.
-* `client_assertion_type`: REQUIRED. The Openid assertion challenge requirements.
-* `client_assertion`: REQUIRED. The JWT Assertion Token previously generated.
+* `client_assertion_type`: REQUIRED IF USING signed_jwt_token. The Openid assertion challenge requirements.
+* `client_assertion`: REQUIRED IF USING signed_jwt_token. The JWT Assertion Token previously generated.
+* `client_secret`: REQUIRED IF USING secret_key. The provided secret key.
 
 Remember to add the `Content-Type` http header with `application/x-www-form-urlencoded` as value.
 
@@ -95,7 +96,5 @@ keytool -importkeystore -srckeystore ./keystore.p12 -srcstoretype pkcs12 -destke
 
 ## References
 
-* <https://docs.oracle.com/cd/E35976_01/server.740/es_admin/src/tadm_ssl_convert_pem_to_jks.html>
-* <https://www.baeldung.com/convert-pem-to-jks>
 * <https://openid.net/specs/openid-connect-core-1_0.html#ClientAuthentication>
 * <https://login.becomex.com.br/auth/realms/becomex/.well-known/openid-configuration>
