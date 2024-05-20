@@ -66,9 +66,9 @@ The http call is a standard `x-www-form-encoded` request including the follow fi
 
 * `client_id`: REQUIRED. The Client Id provided by Becomex.
 * `grant_type`: REQUIRED. The oAuth grant type, `client_credentials`.
-* `client_assertion_type`: REQUIRED IF USING signed_jwt_token. The Openid assertion challenge requirements.
-* `client_assertion`: REQUIRED IF USING signed_jwt_token. The JWT Assertion Token previously generated.
-* `client_secret`: REQUIRED IF USING secret_key. The provided secret key.
+* `client_assertion_type`: REQUIRED **IF USING signed_jwt_token**. The Openid assertion challenge requirements.
+* `client_assertion`: REQUIRED **IF USING signed_jwt_token**. The JWT Assertion Token previously generated.
+* `client_secret`: REQUIRED **IF USING secret_key**. The secret key provided by Becomex.
 
 Remember to add the `Content-Type` http header with `application/x-www-form-urlencoded` as value.
 
